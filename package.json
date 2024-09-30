@@ -14,10 +14,27 @@
   "contributes": {
     "commands": [
       {
-        "command": "codescrub.helloWorld",
-        "title": "Hello World"
+        "command": "codescrub.copyWithReplacements",
+        "title": "Copy with Scrubbed Content"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codeScrub",
+          "title": "CodeScrub",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "codeScrub": [
+        {
+          "id": "codeScrubConfigView",
+          "name": "Scrub Config"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
