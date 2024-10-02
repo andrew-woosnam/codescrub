@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeScrub - Scrub Sensitive Code</title>
+    <style>
+        /* Make text areas and input fields full-width */
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+            margin: 5px 0;
+            padding: 10px;
+        }
+
+        /* Add a bit of margin between each pair of input fields */
+        #mappings>div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CodeScrub - Scrub Sensitive Code</h1>
+
+    <textarea id="codeInput" rows="10" cols="50" placeholder="Enter your code here..."></textarea>
+
+    <h3>Mappings (Secret => Generic)</h3>
+    <div id="mappings">
+        <div>
+            <input type="text" id="secret1" placeholder="Secret 1" />
+            <input type="text" id="generic1" placeholder="Generic 1" />
+        </div>
+        <button onclick="addMapping()">Add Mapping</button>
+    </div>
+
+    <button id="scrubBtn">Scrub Code</button>
+    <button id="unscrubBtn">Unscrub Code</button>
+
+    <h3>Result</h3>
+    <textarea id="resultOutput" rows="10" cols="50" readonly></textarea>
+
+    <script>
+        // Function to perform the scrubbing (translate secret => generic or vice versa)
+        function scrubCode(code, mappings) {
+            let scrubbedCode = code;
+            for (const [sensitive, generic] of Object.entries(mappings)) {
+                // Escape special regex characters in the sensitive string
+                const escapedSensitive = sensitive.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+                // Create a regex to match all occurrences of the sensitive string globally and case-insensitively
+                const regex = new RegExp(escapedSensitive, 'gi');
+
+                // Perform the replacement
+                scrubbedCode = scrubbedCode.replace(regex, generic);
+            }
+            return scrubbedCode;
+        }
+
+        // Function to add new mapping input fields
+        function addMapping() {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <input type="text" class="secret" placeholder="Secret" />
+                <input type="text" class="generic" placeholder="Generic" />
+            `;
+            document.getElementById('mappings').appendChild(div);
+        }
+
+        // Function to get mappings and perform scrubbing/unscrubbing
+        function translate(direction) {
+            const code = document.getElementById('codeInput').value;
+            const secrets = document.querySelectorAll('.secret');
+            const generics = document.querySelectorAll('.generic');
+
+            // Build the mapping object
+            const mappings = {};
+            secrets.forEach((secretField, index) => {
+                const genericField = generics[index];
+                if (secretField.value && genericField.value) {
+                    if (direction === 'scrub') {
+                        mappings[secretField.value] = genericField.value;
+                    } else {
+                        mappings[genericField.value] = secretField.value; // Reverse direction
+                    }
+                }
+            });
+
+            // Scrub or unscrub the code based on direction
+            const result = scrubCode(code, mappings);
+            document.getElementById('resultOutput').value = result;
+        }
+
+        // Attach event listeners
+        document.getElementById('scrubBtn').addEventListener('click', () => translate('scrub'));
+        document.getElementById('unscrubBtn').addEventListener('click', () => translate('unscrub'));
+    </script>
+</body>
+
+</html>
