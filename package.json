@@ -6,18 +6,11 @@
   "engines": {
     "vscode": "^1.93.0"
   },
-  "categories": [
-    "Other"
+  "activationEvents": [
+    "onView:codeScrubConfigView"
   ],
-  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "codescrub.copyWithReplacements",
-        "title": "Copy with Scrubbed Content"
-      }
-    ],
     "viewsContainers": {
       "activitybar": [
         {
@@ -34,7 +27,13 @@
           "name": "Scrub Config"
         }
       ]
-    }
+    },
+    "commands": [
+      {
+        "command": "codeScrub.copyWithReplacements",
+        "title": "Copy with Scrubbed Content"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
