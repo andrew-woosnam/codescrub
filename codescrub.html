@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeScrub - Scrub Sensitive Code</title>
     <style>
-        /* Make text areas and input fields full-width */
         textarea,
         input[type="text"] {
             width: 100%;
@@ -15,9 +14,13 @@
             padding: 10px;
         }
 
-        /* Add a bit of margin between each pair of input fields */
-        #mappings>div {
-            margin-bottom: 10px;
+        #mappingInput {
+            height: 150px;
+            font-family: monospace;
+        }
+
+        .options {
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -27,15 +30,21 @@
 
     <textarea id="codeInput" rows="10" cols="50" placeholder="Enter your code here..."></textarea>
 
-    <h3>Mappings (Secret => Generic)</h3>
-    <div id="mappings">
-        <div>
-            <input type="text" id="secret1" placeholder="Secret 1" />
-            <input type="text" id="generic1" placeholder="Generic 1" />
-        </div>
-        <button onclick="addMapping()">Add Mapping</button>
+    <h3>Mappings (JSON Format)</h3>
+    <textarea id="mappingInput" placeholder='{ "secret": "generic", "cat": "dog" }'></textarea>
+    <small>Enter your mappings as a valid JSON object.</small>
+
+    <div class="options">
+        <label>
+            <input type="checkbox" id="caseSensitive" /> Case Sensitive
+        </label>
+        <br />
+        <label>
+            <input type="checkbox" id="wholeWord" /> Whole Word Matching
+        </label>
     </div>
 
+    <br />
     <button id="scrubBtn">Scrub Code</button>
     <button id="unscrubBtn">Unscrub Code</button>
 
@@ -44,14 +53,20 @@
 
     <script>
         // Function to perform the scrubbing (translate secret => generic or vice versa)
-        function scrubCode(code, mappings) {
+        function scrubCode(code, mappings, caseSensitive, wholeWord) {
             let scrubbedCode = code;
             for (const [sensitive, generic] of Object.entries(mappings)) {
                 // Escape special regex characters in the sensitive string
                 const escapedSensitive = sensitive.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-                // Create a regex to match all occurrences of the sensitive string globally and case-insensitively
-                const regex = new RegExp(escapedSensitive, 'gi');
+                // Construct regex flags based on case sensitivity
+                const flags = caseSensitive ? 'g' : 'gi'; // 'g' for global, 'i' for case-insensitive
+
+                // Adjust regex pattern based on whole word matching
+                const regexPattern = wholeWord ? `\\b${escapedSensitive}\\b` : escapedSensitive;
+
+                // Create a regex to match occurrences of the sensitive string
+                const regex = new RegExp(regexPattern, flags);
 
                 // Perform the replacement
                 scrubbedCode = scrubbedCode.replace(regex, generic);
@@ -59,37 +74,35 @@
             return scrubbedCode;
         }
 
-        // Function to add new mapping input fields
-        function addMapping() {
-            const div = document.createElement('div');
-            div.innerHTML = `
-                <input type="text" class="secret" placeholder="Secret" />
-                <input type="text" class="generic" placeholder="Generic" />
-            `;
-            document.getElementById('mappings').appendChild(div);
-        }
-
-        // Function to get mappings and perform scrubbing/unscrubbing
+        // Function to parse JSON and get mappings, and perform scrubbing/unscrubbing
         function translate(direction) {
             const code = document.getElementById('codeInput').value;
-            const secrets = document.querySelectorAll('.secret');
-            const generics = document.querySelectorAll('.generic');
+            const mappingInput = document.getElementById('mappingInput').value;
 
-            // Build the mapping object
-            const mappings = {};
-            secrets.forEach((secretField, index) => {
-                const genericField = generics[index];
-                if (secretField.value && genericField.value) {
-                    if (direction === 'scrub') {
-                        mappings[secretField.value] = genericField.value;
-                    } else {
-                        mappings[genericField.value] = secretField.value; // Reverse direction
-                    }
+            // Get options for case sensitivity and whole word matching
+            const caseSensitive = document.getElementById('caseSensitive').checked;
+            const wholeWord = document.getElementById('wholeWord').checked;
+
+            // Try parsing the JSON mappings
+            let mappings = {};
+            try {
+                mappings = JSON.parse(mappingInput);
+            } catch (e) {
+                alert('Invalid JSON format. Please check your mappings.');
+                return;
+            }
+
+            // Reverse the mappings if unscrubbing
+            if (direction === 'unscrub') {
+                const reversedMappings = {};
+                for (const [secret, generic] of Object.entries(mappings)) {
+                    reversedMappings[generic] = secret;
                 }
-            });
+                mappings = reversedMappings;
+            }
 
             // Scrub or unscrub the code based on direction
-            const result = scrubCode(code, mappings);
+            const result = scrubCode(code, mappings, caseSensitive, wholeWord);
             document.getElementById('resultOutput').value = result;
         }
 
