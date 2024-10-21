@@ -22,13 +22,36 @@
         .options {
             margin-top: 10px;
         }
+
+        .copy-btn {
+            float: right;
+            background-color: #f0f0f0;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .copy-btn i {
+            font-size: 16px;
+        }
+
+        .text-box-wrapper {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
     <h1>CodeScrub - Scrub Sensitive Code</h1>
 
-    <textarea id="codeInput" rows="10" cols="50" placeholder="Enter your code here..."></textarea>
+    <div class="text-box-wrapper">
+        <button id="copyInputBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+        <textarea id="codeInput" rows="10" cols="50" placeholder="Enter your code here..."></textarea>
+    </div>
 
     <h3>Mappings (JSON Format)</h3>
     <textarea id="mappingInput" placeholder='{ "secret": "generic", "cat": "dog" }'></textarea>
@@ -49,7 +72,11 @@
     <button id="unscrubBtn">Unscrub Code</button>
 
     <h3>Result</h3>
-    <textarea id="resultOutput" rows="10" cols="50" readonly></textarea>
+
+    <div class="text-box-wrapper">
+        <button id="copyOutputBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+        <textarea id="resultOutput" rows="10" cols="50" readonly></textarea>
+    </div>
 
     <script>
         // Function to perform the scrubbing (translate secret => generic or vice versa)
@@ -109,6 +136,20 @@
         // Attach event listeners
         document.getElementById('scrubBtn').addEventListener('click', () => translate('scrub'));
         document.getElementById('unscrubBtn').addEventListener('click', () => translate('unscrub'));
+
+        // Copy input code to clipboard
+        document.getElementById('copyInputBtn').addEventListener('click', () => {
+            const inputCode = document.getElementById('codeInput');
+            inputCode.select();
+            document.execCommand('copy');
+        });
+
+        // Copy output result to clipboard
+        document.getElementById('copyOutputBtn').addEventListener('click', () => {
+            const outputCode = document.getElementById('resultOutput');
+            outputCode.select();
+            document.execCommand('copy');
+        });
     </script>
 </body>
 
