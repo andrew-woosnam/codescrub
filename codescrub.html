@@ -6,39 +6,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeScrub - Scrub Sensitive Code</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
         textarea,
         input[type="text"] {
             width: 100%;
             box-sizing: border-box;
-            margin: 5px 0;
-            padding: 10px;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #dcdcdc;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            resize: none;
         }
 
         #mappingInput {
             height: 150px;
-            font-family: monospace;
         }
 
         .options {
-            margin-top: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #2c3e50;
         }
 
         .copy-btn {
-            float: right;
-            background-color: #f0f0f0;
+            background-color: #3498db;
+            color: white;
             border: none;
-            padding: 5px;
+            padding: 8px 12px;
             cursor: pointer;
             font-size: 14px;
+            border-radius: 5px;
+            float: right;
+            display: flex;
+            align-items: center;
         }
 
         .copy-btn i {
-            font-size: 16px;
+            margin-right: 5px;
         }
 
         .text-box-wrapper {
             position: relative;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #27ae60;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        small {
+            font-size: 12px;
+            color: #7f8c8d;
         }
 
     </style>
@@ -54,8 +111,10 @@
     </div>
 
     <h3>Mappings (JSON Format)</h3>
-    <textarea id="mappingInput" placeholder='{ "secret": "generic", "cat": "dog" }'></textarea>
-    <small>Enter your mappings as a valid JSON object.</small>
+    <div class="text-box-wrapper">
+        <textarea id="mappingInput" placeholder='{ "secret": "generic", "cat": "dog" }'></textarea>
+        <small>Enter your mappings as a valid JSON object.</small>
+    </div>
 
     <div class="options">
         <label>
@@ -67,9 +126,10 @@
         </label>
     </div>
 
-    <br />
-    <button id="scrubBtn">Scrub Code</button>
-    <button id="unscrubBtn">Unscrub Code</button>
+    <div class="text-box-wrapper">
+        <button id="scrubBtn">Scrub Code</button>
+        <button id="unscrubBtn">Unscrub Code</button>
+    </div>
 
     <h3>Result</h3>
 
@@ -83,34 +143,21 @@
         function scrubCode(code, mappings, caseSensitive, wholeWord) {
             let scrubbedCode = code;
             for (const [sensitive, generic] of Object.entries(mappings)) {
-                // Escape special regex characters in the sensitive string
                 const escapedSensitive = sensitive.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-                // Construct regex flags based on case sensitivity
-                const flags = caseSensitive ? 'g' : 'gi'; // 'g' for global, 'i' for case-insensitive
-
-                // Adjust regex pattern based on whole word matching
+                const flags = caseSensitive ? 'g' : 'gi';
                 const regexPattern = wholeWord ? `\\b${escapedSensitive}\\b` : escapedSensitive;
-
-                // Create a regex to match occurrences of the sensitive string
                 const regex = new RegExp(regexPattern, flags);
-
-                // Perform the replacement
                 scrubbedCode = scrubbedCode.replace(regex, generic);
             }
             return scrubbedCode;
         }
 
-        // Function to parse JSON and get mappings, and perform scrubbing/unscrubbing
         function translate(direction) {
             const code = document.getElementById('codeInput').value;
             const mappingInput = document.getElementById('mappingInput').value;
-
-            // Get options for case sensitivity and whole word matching
             const caseSensitive = document.getElementById('caseSensitive').checked;
             const wholeWord = document.getElementById('wholeWord').checked;
 
-            // Try parsing the JSON mappings
             let mappings = {};
             try {
                 mappings = JSON.parse(mappingInput);
@@ -119,7 +166,6 @@
                 return;
             }
 
-            // Reverse the mappings if unscrubbing
             if (direction === 'unscrub') {
                 const reversedMappings = {};
                 for (const [secret, generic] of Object.entries(mappings)) {
@@ -128,12 +174,10 @@
                 mappings = reversedMappings;
             }
 
-            // Scrub or unscrub the code based on direction
             const result = scrubCode(code, mappings, caseSensitive, wholeWord);
             document.getElementById('resultOutput').value = result;
         }
 
-        // Attach event listeners
         document.getElementById('scrubBtn').addEventListener('click', () => translate('scrub'));
         document.getElementById('unscrubBtn').addEventListener('click', () => translate('unscrub'));
 
