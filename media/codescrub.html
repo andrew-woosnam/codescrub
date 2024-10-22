@@ -6,46 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeScrub - Scrub Sensitive Code</title>
     <link rel="stylesheet" href="${cssUri}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
-    <h1>CodeScrub - Scrub Sensitive Code</h1>
 
+    <!-- Code input area -->
     <div class="text-box-wrapper">
-        <button id="copyInputBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
         <textarea id="codeInput" rows="10" cols="50" placeholder="Enter your code here..."></textarea>
     </div>
 
-    <h3>Mappings (JSON Format)</h3>
-    <div class="text-box-wrapper">
-        <textarea id="mappingInput" placeholder='{ "secret": "generic", "cat": "dog" }'></textarea>
-        <small>Enter your mappings as a valid JSON object.</small>
+    <!-- Scrub and Unscrub buttons -->
+    <div class="button-group">
+        <button id="scrubBtn">
+            <i class="arrow down"></i> Scrub
+        </button>
+        <button id="unscrubBtn">
+            <i class="arrow up"></i> Unscrub
+        </button>
     </div>
 
-    <div class="options">
-        <label>
-            <input type="checkbox" id="caseSensitive" /> Case Sensitive
-        </label>
-        <br />
-        <label>
-            <input type="checkbox" id="wholeWord" /> Whole Word Matching
-        </label>
+    <!-- Result output area -->
+    <div class="text-box-wrapper">
+        <textarea id="resultOutput" rows="10" cols="50" placeholder="Scrubbed results will appear here..."
+            readonly></textarea>
     </div>
 
+    <!-- Settings -->
     <div class="text-box-wrapper">
-        <button id="scrubBtn">Scrub Code</button>
-        <button id="unscrubBtn">Unscrub Code</button>
-    </div>
-
-    <h3>Result</h3>
-
-    <div class="text-box-wrapper">
-        <button id="copyOutputBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
-        <textarea id="resultOutput" rows="10" cols="50" readonly></textarea>
+        <h3>Settings</h3>
+        <div class="options">
+            <label>
+                <input type="checkbox" id="caseSensitive" /> Case Sensitive
+            </label>
+            <label>
+                <input type="checkbox" id="wholeWord" /> Whole Word Matching
+            </label>
+        </div>
     </div>
 
     <script src="${scriptUri}"></script>
+
 </body>
 
 </html>

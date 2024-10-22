@@ -1,92 +1,122 @@
+/* General styling for the webview */
 body {
-    font-family: 'Arial', sans-serif;
-    font-size: 16px;
-    background-color: #f4f6f9;
+    font-family: var(--vscode-font-family, sans-serif);
+    font-size: var(--vscode-font-size, 13px);
+    color: var(--vscode-foreground);
+    background-color: var(--vscode-editor-background);
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    color: #333;
-}
-
-h1 {
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
-
-textarea,
-input[type="text"] {
-    width: 100%;
+    justify-content: flex-start;
+    height: 100vh;
     box-sizing: border-box;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 5px;
-    border: 1px solid #dcdcdc;
-    font-family: 'Courier New', monospace;
-    font-size: 16px;
-    background-color: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    resize: none;
-}
-
-#mappingInput {
-    height: 150px;
-}
-
-.options {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #2c3e50;
-}
-
-.copy-btn {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 5px;
-    float: right;
-    display: flex;
-    align-items: center;
-}
-
-.copy-btn i {
-    margin-right: 5px;
 }
 
 .text-box-wrapper {
-    position: relative;
-    margin-bottom: 20px;
-    width: 90%;
-    max-width: 1000px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
 }
 
+/* Styling for the textareas */
+textarea,
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    background-color: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
+    border: 1px solid var(--vscode-input-border);
+    border-radius: 3px;
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: var(--vscode-editor-font-size);
+    margin-bottom: 10px;
+    resize: none;
+}
+
+/* Button group for scrub and unscrub */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    gap: 20px;
+    width: 100%;
+}
+
+/* Buttons should take up equal space */
 button {
-    background-color: #2ecc71;
-    color: white;
+    padding: 6px 12px;
+    background-color: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
+    border-radius: 3px;
     cursor: pointer;
+    font-size: 12px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+button#scrubBtn {
+    margin-left: 10px;
+}
+
+button#unscrubBtn {
     margin-right: 10px;
-    transition: background-color 0.3s ease;
+}
+
+button i {
+    margin-right: 5px;
 }
 
 button:hover {
-    background-color: #27ae60;
+    background-color: var(--vscode-button-hoverBackground);
 }
 
 button:focus {
-    outline: none;
+    outline: 1px solid var(--vscode-focusBorder);
 }
 
+/* Arrow styling for scrub/unscrub buttons */
+.arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+}
+
+.down {
+    border-top: 5px solid var(--vscode-editor-foreground);
+}
+
+.up {
+    border-bottom: 5px solid var(--vscode-editor-foreground);
+}
+
+/* Additional settings UI */
 small {
+    font-size: 11px;
+    color: var(--vscode-descriptionForeground);
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px 0;
+    color: var(--vscode-foreground);
+}
+
+.options label {
+    margin-right: 10px;
     font-size: 12px;
-    color: #7f8c8d;
 }
