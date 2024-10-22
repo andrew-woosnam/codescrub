@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -43,7 +45,6 @@ export class ReplaceSensitiveViewProvider implements vscode.WebviewViewProvider 
         context: vscode.WebviewViewResolveContext,
         _token: vscode.CancellationToken
     ) {
-
         this._view = webviewView;
 
         webviewView.webview.options = {
@@ -51,6 +52,7 @@ export class ReplaceSensitiveViewProvider implements vscode.WebviewViewProvider 
             localResourceRoots: [this._extensionUri]
         };
 
+        // Load HTML content from file
         webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
         webviewView.webview.onDidReceiveMessage(message => {
@@ -66,6 +68,24 @@ export class ReplaceSensitiveViewProvider implements vscode.WebviewViewProvider 
         });
     }
 
+    // Load the HTML file content
+    private _getHtmlForWebview(webview: vscode.Webview): string {
+        // Get the path to the codescrub.html file
+        const htmlPath = path.join(this._extensionUri.fsPath, 'media', 'codescrub.html');
+
+        // Read the HTML file
+        let htmlContent = fs.readFileSync(htmlPath, 'utf8');
+
+        // You can replace any dynamic placeholders with actual resource URIs if needed
+        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'codescrub.js'));
+        const cssUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'style.css'));
+
+        // Replace placeholders in the HTML content if necessary (e.g., for scripts or styles)
+        htmlContent = htmlContent.replace(/\${scriptUri}/g, scriptUri.toString());
+        htmlContent = htmlContent.replace(/\${cssUri}/g, cssUri.toString());
+
+        return htmlContent;
+    }
 
     public getMappings(): { [key: string]: string } {
         return vscode.workspace.getConfiguration().get<{ [key: string]: string }>('codeScrub.mappings') || {};
@@ -76,35 +96,4 @@ export class ReplaceSensitiveViewProvider implements vscode.WebviewViewProvider 
         mappings[data.sensitive] = data.generic;
         vscode.workspace.getConfiguration().update('codeScrub.mappings', mappings, vscode.ConfigurationTarget.Global);
     }
-
-    private _getHtmlForWebview(webview: vscode.Webview) {
-        return `
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Code Scrub Configuration</title>
-        </head>
-        <body>
-            <h2>Configure CodeScrub Replacement</h2>
-            <form>
-                <label for="sensitive">Sensitive Name:</label>
-                <input type="text" id="sensitive" />
-                <label for="generic">Generic Name:</label>
-                <input type="text" id="generic" />
-                <button type="button" onclick="addMapping()">Add Mapping</button>
-            </form>
-
-            <script>
-                const vscode = acquireVsCodeApi();
-                function addMapping() {
-                    const sensitive = document.getElementById('sensitive').value;
-                    const generic = document.getElementById('generic').value;
-                    vscode.postMessage({ command: 'saveMapping', data: { sensitive, generic } });
-                }
-            </script>
-        </body>
-        </html>`;
-    }
 }
-
