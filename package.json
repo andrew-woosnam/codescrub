@@ -6,17 +6,16 @@
   "engines": {
     "vscode": "^1.93.0"
   },
-  "activationEvents": [
-    "onView:codeScrubConfigView"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
+  "icon": "media/icon.png",
   "contributes": {
     "viewsContainers": {
       "activitybar": [
         {
           "id": "codeScrub",
           "title": "CodeScrub",
-          "icon": "media/icon.svg"
+          "icon": "media/icon.png"
         }
       ]
     },
