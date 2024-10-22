@@ -19,6 +19,8 @@ body {
     padding: 10px;
     display: flex;
     flex-direction: column;
+    position: relative;
+    /* To position the copy button */
     background-color: var(--vscode-editor-background);
     color: var(--vscode-editor-foreground);
 }
@@ -36,6 +38,51 @@ input[type="text"] {
     font-size: var(--vscode-editor-font-size);
     margin-bottom: 10px;
     resize: none;
+    position: relative;
+    z-index: 1;
+    /* Ensure text area has lower z-index */
+}
+
+/* Subtle Copy button styling */
+.copy-btn {
+    position: absolute;
+    top: 15px;
+    /* Move it inside the text box */
+    right: 10px;
+    /* Add some padding from the right border */
+    background-color: #555555;
+    /* Subtle grey background */
+    color: var(--vscode-editor-foreground);
+    /* Use foreground color for icon/text */
+    border: none;
+    padding: 4px 6px;
+    /* Reduced padding for a tighter fit */
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    z-index: 2;
+    /* Ensure the button appears above the text area */
+    display: flex;
+    justify-content: center;
+    /* Center icon horizontally */
+    align-items: center;
+    /* Center icon vertically */
+}
+
+.copy-btn i {
+    margin: 0;
+    /* Remove any extra margin */
+}
+
+.copy-btn:hover {
+    background-color: #777777;
+    /* Slightly lighter grey on hover */
+    color: var(--vscode-button-foreground);
+}
+
+/* Keep the focus outline for accessibility */
+.copy-btn:focus {
+    outline: 1px solid var(--vscode-focusBorder);
 }
 
 /* Button group for scrub and unscrub */
@@ -43,12 +90,10 @@ input[type="text"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    gap: 20px;
     width: 100%;
+    padding: 10px 0;
 }
 
-/* Buttons should take up equal space */
 button {
     padding: 6px 12px;
     background-color: var(--vscode-button-background);
@@ -60,28 +105,11 @@ button {
     text-transform: uppercase;
     display: flex;
     align-items: center;
-    flex-grow: 1;
     justify-content: center;
-}
-
-button#scrubBtn {
-    margin-left: 10px;
-}
-
-button#unscrubBtn {
-    margin-right: 10px;
 }
 
 button i {
     margin-right: 5px;
-}
-
-button:hover {
-    background-color: var(--vscode-button-hoverBackground);
-}
-
-button:focus {
-    outline: 1px solid var(--vscode-focusBorder);
 }
 
 /* Arrow styling for scrub/unscrub buttons */
@@ -95,18 +123,15 @@ button:focus {
 
 .down {
     border-top: 5px solid var(--vscode-editor-foreground);
+    /* Downward arrow */
 }
 
 .up {
     border-bottom: 5px solid var(--vscode-editor-foreground);
+    /* Upward arrow */
 }
 
 /* Additional settings UI */
-small {
-    font-size: 11px;
-    color: var(--vscode-descriptionForeground);
-}
-
 .options {
     display: flex;
     flex-direction: row;

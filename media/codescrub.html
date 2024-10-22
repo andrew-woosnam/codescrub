@@ -6,12 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeScrub - Scrub Sensitive Code</title>
     <link rel="stylesheet" href="${cssUri}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
 
-    <!-- Code input area -->
+    <!-- Code input area with copy button -->
     <div class="text-box-wrapper">
+        <button class="copy-btn" id="copyInputBtn">
+            <i class="fas fa-copy"></i>
+        </button>
         <textarea id="codeInput" rows="10" cols="50" placeholder="Enter your code here..."></textarea>
     </div>
 
@@ -25,8 +29,11 @@
         </button>
     </div>
 
-    <!-- Result output area -->
+    <!-- Result output area with copy button -->
     <div class="text-box-wrapper">
+        <button class="copy-btn" id="copyOutputBtn">
+            <i class="fas fa-copy"></i>
+        </button>
         <textarea id="resultOutput" rows="10" cols="50" placeholder="Scrubbed results will appear here..."
             readonly></textarea>
     </div>
