@@ -13,6 +13,16 @@ function hideError() {
     errorDiv.style.display = 'none';  // Hide the error message div
 }
 
+// Function to toggle the visibility of the translation mappings section
+function toggleMappingsSection() {
+    const mappingsSection = document.getElementById('mappingsSection');
+    if (mappingsSection.style.display === 'none' || mappingsSection.style.display === '') {
+        mappingsSection.style.display = 'block';
+    } else {
+        mappingsSection.style.display = 'none';
+    }
+}
+
 // Function to perform the scrubbing (translate secret => generic or vice versa)
 function scrubCode(code, mappings, caseSensitive, wholeWord) {
     let scrubbedCode = code;
@@ -61,6 +71,9 @@ function translate(direction) {
 // Add event listeners to scrub and unscrub buttons
 document.getElementById('scrubBtn').addEventListener('click', () => translate('scrub'));
 document.getElementById('unscrubBtn').addEventListener('click', () => translate('unscrub'));
+
+// Add event listener to the toggle button for the mappings section
+document.getElementById('toggleMappingsBtn').addEventListener('click', toggleMappingsSection);
 
 // Function to copy content of the given textarea and update button text
 function copyToClipboard(textareaId, buttonId) {

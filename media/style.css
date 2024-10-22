@@ -155,3 +155,41 @@ button i {
     border-left: 4px solid red;
     border-radius: 4px;
 }
+
+/* Styling for the header bar */
+.header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: var(--vscode-editor-background);
+    border-bottom: 1px solid var(--vscode-editor-hoverHighlightBackground);
+}
+
+/* Styling for the toggle button */
+.dropbtn {
+    background-color: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    position: relative;
+}
+
+/* Styling for the translation mappings section */
+.mappings-section {
+    padding: 10px;
+    background-color: var(--vscode-editor-background);
+    border-bottom: 1px solid var(--vscode-editor-hoverHighlightBackground);
+}
+
+/* Hide or show the translation mappings section */
+.mappings-section.show {
+    display: block;
+}
+
+/* Style checkboxes */
+.header-bar label {
+    margin-right: 10px;
+}
