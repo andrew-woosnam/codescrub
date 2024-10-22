@@ -70,19 +70,15 @@ export class ReplaceSensitiveViewProvider implements vscode.WebviewViewProvider 
 
     // Load the HTML file content
     private _getHtmlForWebview(webview: vscode.Webview): string {
-        // Get the path to the codescrub.html file
+        const cssUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'style.css'));
+        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'codescrub.js'));
         const htmlPath = path.join(this._extensionUri.fsPath, 'media', 'codescrub.html');
 
-        // Read the HTML file
         let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
-        // You can replace any dynamic placeholders with actual resource URIs if needed
-        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'codescrub.js'));
-        const cssUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'style.css'));
-
-        // Replace placeholders in the HTML content if necessary (e.g., for scripts or styles)
-        htmlContent = htmlContent.replace(/\${scriptUri}/g, scriptUri.toString());
+        // Replace placeholders for script and css URIs
         htmlContent = htmlContent.replace(/\${cssUri}/g, cssUri.toString());
+        htmlContent = htmlContent.replace(/\${scriptUri}/g, scriptUri.toString());
 
         return htmlContent;
     }
