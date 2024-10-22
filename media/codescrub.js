@@ -1,3 +1,18 @@
+const vscode = acquireVsCodeApi();
+
+// Function to display an error message in the webview
+function showError(message) {
+    const errorDiv = document.getElementById('error-message');
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';  // Show the error message div
+}
+
+// Function to hide the error message
+function hideError() {
+    const errorDiv = document.getElementById('error-message');
+    errorDiv.style.display = 'none';  // Hide the error message div
+}
+
 // Function to perform the scrubbing (translate secret => generic or vice versa)
 function scrubCode(code, mappings, caseSensitive, wholeWord) {
     let scrubbedCode = code;
@@ -13,6 +28,8 @@ function scrubCode(code, mappings, caseSensitive, wholeWord) {
 
 // Function to handle scrubbing/unscrubbing direction
 function translate(direction) {
+    hideError();  // Hide previous errors before processing
+
     const code = document.getElementById('codeInput').value;
     const mappingInput = document.getElementById('mappingInput').value;
     const caseSensitive = document.getElementById('caseSensitive').checked;
@@ -20,9 +37,12 @@ function translate(direction) {
 
     let mappings = {};
     try {
+        if (!mappingInput.trim()) {
+            throw new Error('No translations provided. Please configure the translation mappings.');
+        }
         mappings = JSON.parse(mappingInput);
     } catch (e) {
-        alert('Invalid JSON format. Please check your mappings.');
+        showError(`Invalid JSON format or No Mappings: ${e.message}`);
         return;
     }
 
