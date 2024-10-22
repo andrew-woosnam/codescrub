@@ -34,31 +34,36 @@
             placeholder='Enter your mappings in JSON format, e.g., { "secret": "generic", "cat": "dog" }'></textarea>
     </div>
 
-    <!-- Code input area with copy button -->
-    <div class="text-box-wrapper">
-        <button class="copy-btn" id="copyInputBtn">
-            <i class="fas fa-copy"></i>
-        </button>
-        <textarea id="codeInput" rows="10" cols="50" placeholder="Enter your code here..."></textarea>
-    </div>
+    <!-- Flex container for input, buttons, and output -->
+    <div class="flex-container">
 
-    <!-- Scrub and Unscrub buttons -->
-    <div class="button-group">
-        <button id="scrubBtn">
-            <i class="arrow down"></i> Scrub
-        </button>
-        <button id="unscrubBtn">
-            <i class="arrow up"></i> Unscrub
-        </button>
-    </div>
+        <!-- Code input area with copy button -->
+        <div class="text-box-wrapper">
+            <button class="copy-btn" id="copyInputBtn">
+                <i class="fas fa-copy"></i>
+            </button>
+            <textarea id="codeInput" rows="10" placeholder="Enter your code here..."></textarea>
+        </div>
 
-    <!-- Result output area with copy button -->
-    <div class="text-box-wrapper">
-        <button class="copy-btn" id="copyOutputBtn">
-            <i class="fas fa-copy"></i>
-        </button>
-        <textarea id="resultOutput" rows="10" cols="50" placeholder="Scrubbed results will appear here..."
-            readonly></textarea>
+        <!-- Scrub and Unscrub buttons -->
+        <div class="button-group">
+            <button id="scrubBtn">
+                <i class="arrow down"></i> Scrub
+            </button>
+            <button id="unscrubBtn">
+                <i class="arrow up"></i> Unscrub
+            </button>
+        </div>
+
+        <!-- Result output area with copy button -->
+        <div class="text-box-wrapper">
+            <button class="copy-btn" id="copyOutputBtn">
+                <i class="fas fa-copy"></i>
+            </button>
+            <textarea id="resultOutput" rows="10" placeholder="Scrubbed results will appear here..."
+                readonly></textarea>
+        </div>
+
     </div>
 
     <script src="${scriptUri}"></script>

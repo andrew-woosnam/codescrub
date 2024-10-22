@@ -14,20 +14,28 @@ body {
     box-sizing: border-box;
 }
 
-.text-box-wrapper {
-    width: 100%;
-    padding: 10px;
+/* Flex container for the main content */
+.flex-container {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    gap: 10px;
+    height: 100%;
+    width: 100%;
+}
+
+/* Flexbox container for each text-box-wrapper */
+.text-box-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
     position: relative;
-    /* To position the copy button */
-    background-color: var(--vscode-editor-background);
-    color: var(--vscode-editor-foreground);
 }
 
 /* Styling for the textareas */
-textarea,
-input[type="text"] {
+textarea {
+    flex-grow: 1;
+    /* Allow the textarea to grow and fill available space */
     width: 100%;
     padding: 8px;
     background-color: var(--vscode-editor-background);
@@ -36,19 +44,16 @@ input[type="text"] {
     border-radius: 3px;
     font-family: var(--vscode-editor-font-family, monospace);
     font-size: var(--vscode-editor-font-size);
-    margin-bottom: 10px;
     resize: none;
-    position: relative;
-    z-index: 1;
-    /* Ensure text area has lower z-index */
+    box-sizing: border-box;
 }
 
 /* Subtle Copy button styling */
 .copy-btn {
     position: absolute;
-    top: 15px;
+    top: 6px;
     /* Move it inside the text box */
-    right: 10px;
+    right: 6px;
     /* Add some padding from the right border */
     background-color: #555555;
     /* Subtle grey background */
@@ -90,8 +95,9 @@ input[type="text"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-    padding: 10px 0;
+    width: calc(100% - 40px);
+    margin: 0 20px;
+    flex-shrink: 0;
 }
 
 button {
